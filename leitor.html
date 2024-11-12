@@ -119,26 +119,35 @@
                     <script>
                         // Função para acessar a câmera
                         function startCamera() {
-                            // Exibe o pop-up que solicita permissão
-                            document.getElementById('popup').style.display = 'none';
+    // Esconde o pop-up que solicita permissão
+    document.getElementById('popup').style.display = 'none';
 
-                            // Verifica se o navegador suporta a API de mídia
-                            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                                // Solicita permissão para acessar a câmera
-                                navigator.mediaDevices.getUserMedia({ video: true })
-                                    .then(function (stream) {
-                                        // Atribui o stream de vídeo ao elemento <video>
-                                        var video = document.getElementById('videoElement');
-                                        video.srcObject = stream;
-                                    })
-                                    .catch(function (error) {
-                                        console.log("Erro ao acessar a câmera: ", error);
-                                    });
-                            } else {
-                                alert("Desculpe, seu navegador não suporta a API de acesso à câmera.");
-                            }
-                        }
-
+    // Verifica se o navegador suporta a API de mídia
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        // Solicita permissão para acessar a câmera traseira
+        navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { exact: "environment" } }
+        })
+        .then(function (stream) {
+            // Atribui o stream de vídeo ao elemento <video>
+            var video = document.getElementById('videoElement');
+            video.srcObject = stream;
+        })
+        .catch(function (error) {
+            console.log("Erro ao acessar a câmera: ", error);
+            alert("Não foi possível acessar a câmera traseira. Usando câmera padrão.");
+            
+            // Tenta abrir a câmera padrão se a traseira não estiver disponível
+            navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                var video = document.getElementById('videoElement');
+                video.srcObject = stream;
+            });
+        });
+    } else {
+        alert("Desculpe, seu navegador não suporta a API de acesso à câmera.");
+    }
+}
                         // Exibe o pop-up assim que a página carregar
                         window.onload = function () {
                             document.getElementById('popup').style.display = 'flex';
