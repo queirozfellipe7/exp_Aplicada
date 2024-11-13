@@ -133,13 +133,13 @@ li {
 
 /*Rodapé*/
 footer {
-    margin: 50px 0;
-    padding: 0 5%;
+    margin: auto;
+    padding: auto;
 }
 
 #rodape1,
 #rodape2 {
-    max-width: 60%;
+    max-width:100%;
 }
 
 .separador-logo {
